@@ -1,47 +1,39 @@
 # Euler Problem 3: largest prime factor of 600,851,475,143
 
-# To fix: handling squares
+from math import sqrt
 
-toBreak = 600851475143
+toBreak = 600851475143001
 primes = [2, 3]
 
-def findNextPrime(n, toBreak):
-    n += 1
-    isnPrime = False
+def countNCheck(toBreak):
+    n = 5
+    highestPrime = 1
+    orig = toBreak
 
-    while n <= toBreak:
+    if toBreak % 2 == 0: 
+        toBreak = toBreak / 2
+        highestPrime = 2
+    if toBreak % 3 == 0: 
+        toBreak = toBreak / 3
+        highestPrime = 3
+
+    while n <= toBreak and n <= sqrt(orig):
+        # print "n is at: " + str(n) + "; toBreak is at: " + str(toBreak)
+        isNPrime = True
         for i in primes:
             if n % i == 0:
                 isNPrime = False
-        else:
-            isnPrime = True
+                # print str(n) + " is not prime"
+        if isNPrime == True:
             primes.append(n)
-            return n
-        n += 1
+            if toBreak % n == 0: 
+                toBreak = toBreak / n
+                # print "Broke down: " + str(toBreak) + " to " + str(toBreak/n)
+                highestPrime = n
+        n += 2
 
-    return n
+    # import ipdb; ipdb.set_trace()
+    return highestPrime
 
-
-def breakDown(n, toBreak):
-
-    if toBreak % n == 0 and n != toBreak:
-        print "Broke down: " + str(toBreak) + " to " + str(toBreak/n)
-        breakDown(n, toBreak/n)
-        # return "Returning: " + str(toBreak / n)
-        return toBreak / n
-    # return "Returning: " + str(toBreak)
-    return toBreak
-
-
-
-n = 2
-# toBreak = 8
-while n < toBreak:
-    toBreak = breakDown(n, toBreak)
-    n = findNextPrime(n, toBreak)
-
-print "Highest prime factor: " + str(n)
-
-
-# findAllPrimes(toBreak)
-# print breakDown(toBreak)
+toBreak = 125
+print "Highest prime factor is: " + str(countNCheck(toBreak))
